@@ -3,21 +3,22 @@ import * as d3 from "d3";
 import { useState } from "react";
 //Dummy Data
 let initialData = [
-  { name: "pizza", count: 200 },
-  { name: "sandwich", count: 800 },
+  { name: "Pizza", count: 200 },
+  { name: "Sandwich", count: 700 },
   { name: "Pasta", count: 650 },
   { name: "Burger", count: 390 },
   { name: "Fries", count: 360 },
   { name: "Cake", count: 280 },
   { name: "Momos", count: 200 },
   { name: "Panipuri", count: 340 },
+  {name:"Samose", count:500}
 ];
 const  width = 600; // Width of SVG
 const  height = 400; // Height of SVG
 const  padding = 20; //Padding
 
 //Component
-function BarChart() {
+const  BarChart=()=> {
   const [data, setData] = useState(initialData); //Data handled with State
 
   // Generating Random Data
@@ -47,27 +48,25 @@ function BarChart() {
   const yAxis = d3.axisLeft(yScale);
 
   useEffect(() => {
-    const svg = d3.select("#wrapper");
-
-    svg
+    d3.select("#wrapper")
       .selectAll("rect")
       .data(data)
       .join("rect")
       .attr("width", xScale.bandwidth())
-      .attr("height", (d) => height - yScale(d.count) - padding) // Adjusted the height
+      .attr("height", (d) => height - yScale(d.count)-padding) // Adjusted the height
       .attr("x", (d) => xScale(d.name))
       .attr("y", (d) => yScale(d.count))
       .attr("fill", "steelblue"); // Added fill color
 
 
-    //For X axis
+    //Plotting X axis on Svg
     d3.select("svg")
       .append("g")
       .attr("class", "xaxis")
       .attr("transform", `translate(${padding}, ${height - padding})`)
       .call(xAxis);
 
-    // For Y axis
+    // Plotting Y axis on Svg
     d3.select("svg")
       .append("g")
       .attr("class", "yaxis")
@@ -81,12 +80,14 @@ function BarChart() {
     };
   }, [xScale, yScale]);
   return (
+    <>
     <div>
       <svg width={width} height={height}>
         <g id="wrapper" transform={`translate(${padding},0)`}></g>
       </svg>
-      <button onClick={generateData}>Update Data</button>
     </div>
+      <button onClick={generateData}>Update Data</button>
+    </>
   );
 }
 
